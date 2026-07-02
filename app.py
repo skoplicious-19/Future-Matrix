@@ -1,3 +1,19 @@
+st.title("📊 FUTURE MATRIX TRADING DASHBOARD")
+
+col1, col2, col3 = st.columns(3)
+
+col1.metric("Weekly Trend", "Bullish")
+col2.metric("H4 Structure", "Bullish")
+col3.metric("Confidence", "85%")
+
+st.divider()
+
+st.subheader("📍 Trade Decision Screen")
+
+st.success("BUY SIGNAL ACTIVE 🚀")
+st.write("Direction: Bullish")
+st.write("Risk: Controlled")
+st.write("Grade: A+ SETUP")
 import streamlit as st
 import random
 import os
