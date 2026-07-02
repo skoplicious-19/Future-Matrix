@@ -1,23 +1,12 @@
-st.title("📊 FUTURE MATRIX TRADING DASHBOARD")
-
-col1, col2, col3 = st.columns(3)
-
-col1.metric("Weekly Trend", "Bullish")
-col2.metric("H4 Structure", "Bullish")
-col3.metric("Confidence", "85%")
-
-st.divider()
-
-st.subheader("📍 Trade Decision Screen")
-
-st.success("BUY SIGNAL ACTIVE 🚀")
-st.write("Direction: Bullish")
-st.write("Risk: Controlled")
-st.write("Grade: A+ SETUP")
 import streamlit as st
 import random
 import os
 import pandas as pd
+
+# =========================
+# PAGE CONFIG (MUST BE FIRST STREAMLIT COMMAND)
+# =========================
+st.set_page_config(page_title="Future Matrix", layout="centered")
 
 # =========================
 # LOG FILE
@@ -28,6 +17,11 @@ if not os.path.exists(log_file):
     with open(log_file, "w") as f:
         f.write("decision,score,grade,direction,result\n")
 
+# =========================
+# UI HEADER
+# =========================
+st.title("📊 FUTURE MATRIX PROP FIRM")
+st.subheader("Trading Dashboard System")
 
 # =========================
 # ENGINE
@@ -74,14 +68,11 @@ def generate_signal():
 def simulate_result():
     return random.choice(["win", "loss", "skip"])
 
-
 # =========================
-# APP UI
+# SESSION STATE
 # =========================
-st.set_page_config(page_title="Future Matrix", layout="centered")
-
-st.title("📊 FUTURE MATRIX PROP FIRM")
-st.subheader("Trading Dashboard System")
+if "balance" not in st.session_state:
+    st.session_state.balance = 1000
 
 # =========================
 # BUTTONS
@@ -94,38 +85,31 @@ with col1:
 with col2:
     auto = st.button("🤖 AUTO TRADE")
 
-
 # =========================
-# SESSION STATE
-# =========================
-if "balance" not in st.session_state:
-    st.session_state.balance = 1000
-
-# =========================
-# RUN TRADE
+# EXECUTION
 # =========================
 if run or auto:
 
     score, direction, grade = generate_signal()
     result = simulate_result()
 
-    # update balance
     if result == "win":
         st.session_state.balance += 10
     elif result == "loss":
         st.session_state.balance -= 10
 
-    # save log
     with open(log_file, "a") as f:
         f.write(f"BUY,{score},{grade},{direction},{result}\n")
 
     st.success("Trade Executed!")
 
-    st.metric("Score", score)
-    st.metric("Grade", grade)
-    st.metric("Result", result)
-    st.metric("Balance", st.session_state.balance)
+    col1, col2, col3 = st.columns(3)
 
+    col1.metric("Score", score)
+    col2.metric("Grade", grade)
+    col3.metric("Result", result)
+
+    st.metric("Balance", st.session_state.balance)
 
 # =========================
 # DASHBOARD
@@ -145,7 +129,6 @@ st.write(f"Trades: {total}")
 st.write(f"Wins: {wins}")
 st.write(f"Losses: {losses}")
 st.write(f"Win Rate: {round(winrate, 2)}%")
-
 
 # =========================
 # EQUITY CURVE
